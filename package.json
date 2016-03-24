@@ -4,12 +4,13 @@
   "description": "Developer Shop",
   "main": "js/app.js",
   "dependencies": {
+    "express": "^4.13.4",
     "flux": "~2.1.1",
-    "underscore": "^1.7.0",
+    "keymirror": "~0.1.1",
     "react": "~0.14.7",
     "react-dom": "~0.14.7",
-    "keymirror": "~0.1.1",
-    "superagent": "~1.8.2"
+    "superagent": "~1.8.2",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "browserify": "~6.2.0",
