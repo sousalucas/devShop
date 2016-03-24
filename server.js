@@ -3,7 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 var app = express();
 
-var static_path = path.join(__dirname, 'src/client');
+var static_path = path.join(__dirname, 'js');
 var port = process.env.PORT || 8080;
 
 app.use(express.static(static_path))
