@@ -12,22 +12,26 @@ var AppActions = {
     })
   },
 
-  addDeveloper: function(dev) {
+  addDevToCart: function(dev) {
     AppDispatcher.handleAction({
       actionType: AppConstants.ADD_DEV,
       dev: dev
     })
   },
 
-  removeDeveloper: function(dev) {
+  removeDevFromCart: function(index) {
     AppDispatcher.handleAction({
       actionType: AppConstants.REMOVE_DEV,
-      dev: dev
+      index: index
     })
   },
 
   getDevsList: function() {
     Api.getDevelopers();
+  },
+
+  getFollowers: function(userName) {
+    Api.getFollowers(userName);
   }
 
 };

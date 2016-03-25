@@ -1,42 +1,49 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
-//var FluxCart = require('./FluxCart.react');
+var Cart = require('../components/Cart');
+var Order = require('../components/Order');
 
 // Method to retrieve state from Stores
-function getCartState() {
+function getState() {
   return {
-    //devs: AppStore.getDevs(),
-    devs: [{
-"login": "mojombo",
-"id": 1,
-"avatar_url": "https://avatars.githubusercontent.com/u/1?v=3",
-"gravatar_id": "",
-"url": "https://api.github.com/users/mojombo",
-"html_url": "https://github.com/mojombo",
-"followers_url": "https://api.github.com/users/mojombo/followers",
-"following_url": "https://api.github.com/users/mojombo/following{/other_user}",
-"gists_url": "https://api.github.com/users/mojombo/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/mojombo/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/mojombo/subscriptions",
-"organizations_url": "https://api.github.com/users/mojombo/orgs",
-"repos_url": "https://api.github.com/users/mojombo/repos",
-"events_url": "https://api.github.com/users/mojombo/events{/privacy}",
-"received_events_url": "https://api.github.com/users/mojombo/received_events",
-"type": "User",
-"site_admin": false
-}],
-    cart: [{login:'hahah', price: 777}]
+    devs: AppStore.getDevs(),
+//     devs: [{
+//               "login": "mojombo",
+//               "avatar_url": "https://avatars.githubusercontent.com/u/1?v=3"
+//   },{
+//             "login": "rrerarae",
+//             "avatar_url": "https://avatars.githubusercontent.com/u/1?v=3"
+// }],
+    cart: AppStore.getCart()
   };
 }
 
 // Define main Controller View
 var App = React.createClass({
 
+  getDevelopersList: function() {
+    AppActions.getDevsList();
+  },
+
+  addDevToCart: function(dev) {
+    //this.getFollowers(dev.login);
+    AppActions.addDevToCart(dev);
+  },
+
+  devsOrder: function() {
+    ReactDOM.render(<Order/>, document.getElementById('dev-shop'));
+  },
+
+  getFollowers: function(userName) {
+    AppActions.getFollowers(userName);
+  },
+
   // Get initial state from stores
   getInitialState: function() {
-    //this.getDevelopersList();
-    return getCartState();
+    this.getDevelopersList();
+    return getState();
   },
 
   // Add change listeners to stores
@@ -49,16 +56,8 @@ var App = React.createClass({
     AppStore.removeChangeListener(this._onChange);
   },
 
-  getDevelopersList: function() {
-    AppActions.getDevsList();
-  },
-
-  addDevToCart: function() {
-    console.log("asdasda");
-    //this.cart = [{login: 'hahha', price: 777}];
-  },
-
   render: function() {
+    var self = this;
     return (
       <div className="dev-shop-app">
         <div className="container">
@@ -72,42 +71,16 @@ var App = React.createClass({
                           <img style={{width: '100px',height: '100px'}} src={dev.avatar_url}/>
                         </div>
                         <div className="dev-login">
-                          {dev.login}
+                          <label>{dev.login}</label>
                         </div>
-                        <div className="dev-price">
-                          {dev.price}
-                        </div>
-                        <button type="button" onClick={this.addDevToCart}>Adicionar ao Carrinho</button>
+                        <button className="btn btn-success" type="button" onClick={self.addDevToCart.bind(self, dev)}>Adicionar ao Carrinho</button>
                       </div>
                   </div>
                 </div>
               )
             })}
-        </div>
-        <div className="dev-cart">
-          <div className="container">
-            <h3>Carrinho</h3>
-            <table className="table-cart">
-              <thead>
-                <tr>
-                  <th>Usuário</th>
-                  <th>Valor</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-              {this.state.cart.map(function(itemDev, index){
-                return (
-                  <tr key={index} className="dev-cart-item">
-                    <td>{itemDev.login}</td>
-                    <td>{itemDev.price}</td>
-                    <td><button type="button" onClick={this.removeDevFromCart}>Remover</button></td>
-                  </tr>
-                )
-              })}
-              </tbody>
-            </table>
-          </div>
+          <Cart data={this.state.cart} />
+          <button className="btn btn-primary" type="button" onClick={this.devsOrder}>Finalizar Compra</button>
         </div>
       </div>
     );
@@ -115,7 +88,7 @@ var App = React.createClass({
 
   // Method to setState based upon Store changes
   _onChange: function() {
-    this.setState(getCartState());
+    this.setState(getState());
   }
 
 });

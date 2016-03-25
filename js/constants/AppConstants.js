@@ -6,6 +6,7 @@ module.exports = keyMirror({
   REMOVE_DEV: null,
   GET_DEV: null,
   GET_DEV_LIST: null,
+  GET_DEV_FOLLOWERS: null,
     request: {
       PENDING:  null,
       TIMEOUT:  null,

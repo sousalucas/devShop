@@ -2,8 +2,8 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var AppConstants = require('../constants/AppConstants');
 var request = require('superagent');
 
-var API_URL = 'http://localhost:3000/api';
-//var API_URL = 'https://devshopapi.herokuapp.com/api';
+//var API_URL = 'http://localhost:3000/api';
+var API_URL = 'https://devshopapi.herokuapp.com/api';
 var TIMEOUT = 10000;
 var _pendingRequests = {};
 
@@ -60,6 +60,17 @@ var Api = {
         var url = makeUrl("/devs");
         var key = AppConstants.GET_DEV_LIST;
         var params = {};
+        abortPendingRequests(key);
+        //dispatch(key, AppConstants.request.PENDING, params);
+        _pendingRequests[key] = get(url).end(
+            makeDigestFun(key, params)
+        );
+    },
+
+    getFollowers: function(userName) {
+        var url = makeUrl("/followers/" + userName);
+        var key = AppConstants.GET_DEV_FOLLOWERS;
+        var params = {userName: userName};
         abortPendingRequests(key);
         //dispatch(key, AppConstants.request.PENDING, params);
         _pendingRequests[key] = get(url).end(
